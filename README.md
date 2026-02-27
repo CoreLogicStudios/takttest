@@ -88,3 +88,4 @@ Centralized in `lib/billing/gating.ts`.
 - Confirm `NEXT_PUBLIC_SUPABASE_URL` starts with `https://` and points to your project URL (not API key value).
 
 - If you see `otp_expired` in the URL when returning from email, request a fresh signup/login link; one-time links expire quickly.
+- If project creation fails or you see org/membership related errors, make sure `003_auth_bootstrap_rls_fix.sql` has been applied in Supabase.
