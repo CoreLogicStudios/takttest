@@ -12,18 +12,28 @@ export default function LoginPage() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) return setError(error.message);
-    router.push('/app');
-    router.refresh();
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) return setError(error.message);
+      router.push('/app');
+      router.refresh();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to reach Supabase. Check your NEXT_PUBLIC_SUPABASE_URL / ANON key and network.';
+      setError(message);
+    }
   };
 
   const onGoogle = async () => {
-    const supabase = createClient();
-    const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin}/app`;
-    const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
-    if (error) setError(error.message);
+    try {
+      const supabase = createClient();
+      const redirectTo = `${process.env.NEXT_PUBLIC_APP_URL ?? window.location.origin}/app`;
+      const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } });
+      if (error) setError(error.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to reach Supabase. Check your NEXT_PUBLIC_SUPABASE_URL / ANON key and network.';
+      setError(message);
+    }
   };
 
   return (

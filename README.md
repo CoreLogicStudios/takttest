@@ -78,3 +78,10 @@ Centralized in `lib/billing/gating.ts`.
 - `pnpm dev`
 - `pnpm build`
 - `pnpm test`
+
+
+## Troubleshooting auth
+- If signup/login shows **Failed to fetch**, usually the browser cannot reach Supabase Auth.
+- Verify `.env.local` has correct values for `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` and restart `pnpm dev`.
+- Ensure your Supabase project is active and reachable from your network/browser.
+- Confirm `NEXT_PUBLIC_SUPABASE_URL` starts with `https://` and points to your project URL (not API key value).
