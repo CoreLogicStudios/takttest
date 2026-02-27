@@ -3,7 +3,7 @@ import { format, addDays } from 'date-fns';
 import { showWatermark } from '@/lib/billing/gating';
 
 export default async function ExportPage({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const [projectRes, zonesRes, trainsRes, assignmentsRes] = await Promise.all([
     supabase.from('projects').select('*, organizations(subscription_status)').eq('id', params.projectId).single(),
     supabase.from('zones').select('*').eq('project_id', params.projectId).order('order_index'),

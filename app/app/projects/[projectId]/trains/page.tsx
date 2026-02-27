@@ -2,12 +2,12 @@ import { AppShell } from '@/components/ui/AppShell';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function TrainsPage({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: trains } = await supabase.from('trains').select('*').eq('project_id', params.projectId).order('order_index');
 
   async function add(formData: FormData) {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     const { count } = await supabase.from('trains').select('*', { count: 'exact', head: true }).eq('project_id', params.projectId);
     await supabase.from('trains').insert({ project_id: params.projectId, name: String(formData.get('name')), abbreviation: String(formData.get('abbreviation')), color: String(formData.get('color')), order_index: count ?? 0, notes: String(formData.get('notes') || ''), active: true });
   }

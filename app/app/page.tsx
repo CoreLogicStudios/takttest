@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { ensureDefaultOrg, enforceProjectLimit } from '@/lib/supabase/queries';
 
 export default async function AppPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
   const org = await ensureDefaultOrg();
@@ -14,7 +14,7 @@ export default async function AppPage() {
   async function createProject(formData: FormData) {
     'use server';
     const name = String(formData.get('name') || 'New Project');
-    const supabase = createClient();
+    const supabase = await createClient();
     const org = await ensureDefaultOrg();
     await enforceProjectLimit(org.id);
     const { data } = await supabase.from('projects').insert({ org_id: org.id, name, start_date: new Date().toISOString().slice(0, 10), takt_length_days: 5, period_count: 20, working_days_mode: false }).select('id').single();

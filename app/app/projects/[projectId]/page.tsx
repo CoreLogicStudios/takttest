@@ -7,7 +7,7 @@ import { Paywall } from '@/components/ui/Paywall';
 import { generateDiagonal } from '@/lib/board/generate';
 
 export default async function ProjectBoard({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: project } = await supabase.from('projects').select('*, organizations(subscription_status)').eq('id', params.projectId).single();
   const [zonesRes, trainsRes, assignsRes, baseRes] = await Promise.all([
     supabase.from('zones').select('*').eq('project_id', params.projectId).order('order_index'),
@@ -20,7 +20,7 @@ export default async function ProjectBoard({ params }: { params: { projectId: st
 
   async function generate() {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     const [zones, trains] = await Promise.all([
       supabase.from('zones').select('id').eq('project_id', params.projectId).order('order_index'),
       supabase.from('trains').select('id').eq('project_id', params.projectId).order('order_index')
@@ -31,14 +31,14 @@ export default async function ProjectBoard({ params }: { params: { projectId: st
 
   async function setBaseline() {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: a } = await supabase.from('assignments').select('zone_id, period_index, train_id').eq('project_id', params.projectId);
     await supabase.from('baselines').insert({ project_id: params.projectId, snapshot_json: a ?? [] });
   }
 
   async function createShare() {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     await supabase.from('public_shares').insert({ project_id: params.projectId, token: crypto.randomUUID().replaceAll('-', '') });
   }
 

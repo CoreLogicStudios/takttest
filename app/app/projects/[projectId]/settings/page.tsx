@@ -3,12 +3,12 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
 export default async function SettingsPage({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: project } = await supabase.from('projects').select('*').eq('id', params.projectId).single();
 
   async function save(formData: FormData) {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     await supabase.from('projects').update({
       name: String(formData.get('name')),
       start_date: String(formData.get('start_date')),

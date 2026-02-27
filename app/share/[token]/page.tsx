@@ -2,7 +2,7 @@ import { BoardClient } from '@/components/board/BoardClient';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function SharePage({ params }: { params: { token: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase.rpc('get_shared_project', { share_token: params.token });
   if (error || !data || !data[0]) return <main className="p-6">Share link invalid, expired, or revoked.</main>;
   const payload = data[0] as any;

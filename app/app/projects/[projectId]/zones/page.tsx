@@ -3,12 +3,12 @@ import { createClient } from '@/lib/supabase/server';
 import { enforceZoneLimit } from '@/lib/supabase/queries';
 
 export default async function ZonesPage({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: zones } = await supabase.from('zones').select('*').eq('project_id', params.projectId).order('order_index');
 
   async function add(formData: FormData) {
     'use server';
-    const supabase = createClient();
+    const supabase = await createClient();
     await enforceZoneLimit(params.projectId);
     const { count } = await supabase.from('zones').select('*', { count: 'exact', head: true }).eq('project_id', params.projectId);
     await supabase.from('zones').insert({ project_id: params.projectId, name: String(formData.get('name')), group_name: String(formData.get('group_name') || ''), order_index: count ?? 0 });

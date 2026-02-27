@@ -2,7 +2,7 @@ import { createClient } from './server';
 import { projectLimit, zoneLimit } from '@/lib/billing/gating';
 
 export async function requireUser() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error('Unauthorized');
   return { supabase, user };

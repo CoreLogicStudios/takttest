@@ -5,7 +5,7 @@ import { Paywall } from '@/components/ui/Paywall';
 import { computeAnalytics } from '@/lib/board/analytics';
 
 export default async function AnalyticsPage({ params }: { params: { projectId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: project } = await supabase.from('projects').select('*, organizations(subscription_status)').eq('id', params.projectId).single();
   if (!canUseAnalytics(project.organizations)) return <AppShell><Paywall feature="Analytics" /></AppShell>;
   const [zones, assignments, trains] = await Promise.all([
