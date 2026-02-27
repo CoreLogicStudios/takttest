@@ -5,12 +5,13 @@ import { canUseAnalytics } from '@/lib/billing/gating';
 import { Paywall } from '@/components/ui/Paywall';
 import { computeAnalytics } from '@/lib/board/analytics';
 
-export default async function AnalyticsPage({ params }: { params: { projectId: string } }) {
+export default async function AnalyticsPage({ params }: { params: Promise<{ projectId: string }> }) {
+  const { projectId } = await params;
   const supabase = await createClient();
   const { data: project } = await supabase
     .from('projects')
     .select('*, organizations(subscription_status)')
-    .eq('id', params.projectId)
+    .eq('id', projectId)
     .maybeSingle();
 
   if (!project) notFound();
@@ -23,9 +24,9 @@ export default async function AnalyticsPage({ params }: { params: { projectId: s
     );
 
   const [zones, assignments, trains] = await Promise.all([
-    supabase.from('zones').select('id').eq('project_id', params.projectId),
-    supabase.from('assignments').select('train_id,period_index').eq('project_id', params.projectId),
-    supabase.from('trains').select('id,name').eq('project_id', params.projectId)
+    supabase.from('zones').select('id').eq('project_id', projectId),
+    supabase.from('assignments').select('train_id,period_index').eq('project_id', projectId),
+    supabase.from('trains').select('id,name').eq('project_id', projectId)
   ]);
   const metrics = computeAnalytics({
     zonesCount: zones.data?.length ?? 0,
