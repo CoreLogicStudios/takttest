@@ -27,6 +27,7 @@ Production-ready MVP for takt planning (zone-by-time grid) using Next.js App Rou
 2. Run SQL migrations in order:
    - `supabase/migrations/001_init.sql`
    - `supabase/migrations/002_rls.sql`
+   - `supabase/migrations/003_auth_bootstrap_rls_fix.sql`
 3. Configure env in `.env.local`:
 
 ```bash
@@ -85,3 +86,5 @@ Centralized in `lib/billing/gating.ts`.
 - Verify `.env.local` has correct values for `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` and restart `pnpm dev`.
 - Ensure your Supabase project is active and reachable from your network/browser.
 - Confirm `NEXT_PUBLIC_SUPABASE_URL` starts with `https://` and points to your project URL (not API key value).
+
+- If you see `otp_expired` in the URL when returning from email, request a fresh signup/login link; one-time links expire quickly.
