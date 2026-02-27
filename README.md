@@ -28,6 +28,7 @@ Production-ready MVP for takt planning (zone-by-time grid) using Next.js App Rou
    - `supabase/migrations/001_init.sql`
    - `supabase/migrations/002_rls.sql`
    - `supabase/migrations/003_auth_bootstrap_rls_fix.sql`
+   - `supabase/migrations/004_rls_recursion_fix.sql`
 3. Configure env in `.env.local`:
 
 ```bash
@@ -89,3 +90,5 @@ Centralized in `lib/billing/gating.ts`.
 
 - If you see `otp_expired` in the URL when returning from email, request a fresh signup/login link; one-time links expire quickly.
 - If project creation fails or you see org/membership related errors, make sure `003_auth_bootstrap_rls_fix.sql` has been applied in Supabase.
+
+- If you see `stack depth limit exceeded` while creating a project, apply `004_rls_recursion_fix.sql` (it fixes recursive RLS membership checks).
