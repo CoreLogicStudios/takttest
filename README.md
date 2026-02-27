@@ -45,6 +45,18 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
+
+## Auth setup (Email + Google)
+1. In Supabase, go to **Authentication -> Providers**.
+2. Enable **Email** provider (for email/password sign up).
+3. Enable **Google** provider and set Google OAuth client id/secret.
+4. In Supabase **Authentication -> URL Configuration**, add redirect URLs:
+   - `http://localhost:3000/app`
+   - `https://<your-vercel-domain>/app`
+5. In Google Cloud OAuth credentials, add authorized redirect URI from Supabase provider setup and authorized JavaScript origins for local/prod app URLs.
+
+The login and signup pages include both email/password and “Continue with Google” options.
+
 ## Deploy to Vercel
 1. Push repo to GitHub.
 2. Import project in Vercel.
